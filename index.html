@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simple TSD — Терминал сбора данных для склада</title>
-<meta name="description" content="Мобильное приложение для автоматизации складских операций: приёмка, отгрузка, инвентаризация, сборка заказов. Интеграция с 1С, работа офлайн, синхронизация.">
+<meta name="description" content="Мобильное приложение для автоматизации складских операций. Интеграция с 1С, работа офлайн, синхронизация.">
 <link rel="icon" href="icon.png" type="image/png">
 <link rel="apple-touch-icon" href="icon.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
     --primary: #3B82F6; --primary-dark: #2563EB; --primary-light: #DBEAFE;
@@ -25,7 +24,6 @@
   .icon { width: 24px; height: 24px; stroke-width: 1.8; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .icon-lg { width: 28px; height: 28px; }
 
-  /* NAV */
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); border-bottom: 1px solid rgba(226,232,240,0.7); }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; max-width: 1140px; margin: 0 auto; }
   .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: var(--text); text-decoration: none; }
@@ -35,7 +33,6 @@
   .nav-links a:hover { color: var(--primary); }
   @media (max-width: 768px) { .nav-links { display: none; } }
 
-  /* HERO */
   .hero { padding: 120px 0 64px; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.06), transparent), radial-gradient(ellipse 50% 40% at 100% 50%, rgba(13,148,136,0.05), transparent); }
   .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; position: relative; }
@@ -52,7 +49,6 @@
   .btn-ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
   .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
 
-  /* PHONE — 9:20 for 1080x2400 */
   .phone-wrap { display: flex; justify-content: center; position: relative; }
   .phone-wrap::before { content: ''; position: absolute; inset: -40px; background: radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%); z-index: 0; }
   .phone { position: relative; width: 260px; z-index: 1; background: #1E293B; border-radius: 32px; padding: 6px; box-shadow: 0 30px 60px -16px rgba(15,23,42,0.3), 0 0 0 1px rgba(255,255,255,0.06); animation: float 6s ease-in-out infinite; }
@@ -61,14 +57,12 @@
   .phone-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .phone-notch { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 80px; height: 18px; background: #1E293B; border-radius: 12px; z-index: 2; }
 
-  /* SECTIONS */
   section { padding: 72px 0; }
   .section-head { text-align: center; margin-bottom: 48px; }
   .section-head .eyebrow { display: inline-block; color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
   .section-head h2 { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
   .section-head p { color: var(--text-3); font-size: 17px; max-width: 560px; margin: 0 auto; }
 
-  /* FEATURES */
   .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
   .feature { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; transition: all .2s; }
   .feature:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
@@ -78,7 +72,7 @@
   .feature h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
   .feature p { color: var(--text-3); font-size: 14px; }
 
-  /* HOW IT WORKS — animated scenes */
+  /* HOW — all 6 scenes in one dark section */
   .how-section { background: var(--text); }
   .how-section .section-head h2 { color: white; }
   .how-section .section-head .eyebrow { color: var(--primary); }
@@ -91,8 +85,6 @@
   .how-scene { height: 200px; display: flex; align-items: center; justify-content: center; }
 
   /* === ANIMATIONS === */
-
-  /* Scan: line + flash + checkmark */
   @keyframes scanline { 0%,100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(56px); opacity: 0.7; } }
   @keyframes scan-flash { 0%,45%,100% { opacity: 0; } 50%,70% { opacity: 0.25; } }
   @keyframes scan-check { 0%,80%,100% { transform: scale(0); opacity: 0; } 85%,95% { transform: scale(1); opacity: 1; } }
@@ -100,24 +92,23 @@
   .anim-scan-flash { animation: scan-flash 2.5s ease-in-out infinite; }
   .anim-scan-check { animation: scan-check 2.5s ease-in-out infinite; transform-origin: center; }
 
-  /* Item move: box travels between cells */
+  /* FIXED: A-01 → B-03. Delta: dx=134, dy=55 */
   @keyframes item-move {
     0% { transform: translate(0,0); opacity: 0; }
     8% { opacity: 1; }
-    35% { transform: translate(0,0); opacity: 1; }
-    50% { transform: translate(60px,-40px); opacity: 1; }
-    65% { transform: translate(120px,-40px); opacity: 1; }
-    75% { transform: translate(120px,0); opacity: 1; }
-    90% { transform: translate(120px,0); opacity: 1; }
-    100% { transform: translate(120px,0); opacity: 0; }
+    30% { transform: translate(0,0); opacity: 1; }
+    42% { transform: translate(67px,-25px); opacity: 1; }
+    55% { transform: translate(134px,-25px); opacity: 1; }
+    68% { transform: translate(134px,55px); opacity: 1; }
+    88% { transform: translate(134px,55px); opacity: 1; }
+    100% { transform: translate(134px,55px); opacity: 0; }
   }
   .anim-item { animation: item-move 4.5s ease-in-out infinite; }
   @keyframes path-dash { to { stroke-dashoffset: -20; } }
   .anim-path { animation: path-dash 1.5s linear infinite; }
-  @keyframes cell-flash { 0%,70%,100% { fill: none; } 75%,90% { fill: rgba(59,130,246,0.15); } }
+  @keyframes cell-flash { 0%,65%,100% { fill: none; } 68%,85% { fill: rgba(59,130,246,0.15); } }
   .anim-cell-flash { animation: cell-flash 4.5s ease-in-out infinite; }
 
-  /* Sync: bidirectional dots + pulse */
   @keyframes sync-r { 0% { transform: translateX(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateX(100px); opacity: 0; } }
   @keyframes sync-l { 0% { transform: translateX(100px); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
   @keyframes sync-pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
@@ -129,7 +120,6 @@
   .anim-dot-l3 { animation: sync-l 2s ease-in-out infinite 1.25s; }
   .anim-sync-pulse { animation: sync-pulse 2s ease-in-out infinite; }
 
-  /* Receiving: truck slides in, box drops */
   @keyframes truck-in { 0% { transform: translateX(-80px); opacity: 0; } 15% { transform: translateX(0); opacity: 1; } 80% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
   @keyframes box-drop { 0%,20% { transform: translate(0,0); opacity: 0; } 25% { opacity: 1; } 45% { transform: translate(0,0); } 60% { transform: translate(0,30px); } 75% { transform: translate(0,30px); opacity: 1; } 90% { opacity: 0; } 100% { opacity: 0; } }
   @keyframes arrow-pulse { 0%,100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(4px); opacity: 1; } }
@@ -137,7 +127,6 @@
   .anim-box-drop { animation: box-drop 5s ease-in-out infinite; }
   .anim-arrow { animation: arrow-pulse 1.5s ease-in-out infinite; }
 
-  /* Picking: items get checked one by one */
   @keyframes pick-check { 0%,20% { transform: scale(0); opacity: 0; } 25%,90% { transform: scale(1); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
   @keyframes pick-progress { 0% { width: 0; } 25% { width: 33%; } 50% { width: 66%; } 75% { width: 100%; } 90% { width: 100%; } 100% { width: 0; } }
   @keyframes pick-done { 0%,85%,100% { transform: scale(0); opacity: 0; } 90%,95% { transform: scale(1); opacity: 1; } }
@@ -147,25 +136,11 @@
   .anim-pick-bar { animation: pick-progress 6s ease-in-out infinite; }
   .anim-pick-done { animation: pick-done 6s ease-in-out infinite; }
 
-  /* Printing: label slides out */
   @keyframes print-label { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 50% { transform: translateY(0); } 80% { transform: translateY(40px); opacity: 1; } 100% { transform: translateY(40px); opacity: 0; } }
   @keyframes print-barcode { 0%,30% { opacity: 0; } 40%,80% { opacity: 1; } 100% { opacity: 0; } }
   .anim-print-label { animation: print-label 4s ease-in-out infinite; }
   .anim-print-barcode { animation: print-barcode 4s ease-in-out infinite; }
 
-  /* Notification: bell shake + badge */
-  @keyframes bell-shake { 0%,100% { transform: rotate(0); } 5% { transform: rotate(15deg); } 10% { transform: rotate(-12deg); } 15% { transform: rotate(8deg); } 20% { transform: rotate(-5deg); } 25% { transform: rotate(0); } }
-  @keyframes badge-pop { 0%,25% { transform: scale(0); opacity: 0; } 30%,90% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
-  @keyframes ripple { 0% { transform: scale(0.5); opacity: 0.6; } 100% { transform: scale(2); opacity: 0; } }
-  .anim-bell { animation: bell-shake 3s ease-in-out infinite; transform-origin: top center; }
-  .anim-badge { animation: badge-pop 3s ease-in-out infinite; transform-origin: center; }
-  .anim-ripple { animation: ripple 3s ease-out infinite; transform-origin: center; }
-
-  /* Stats counter */
-  @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .stat-anim { animation: count-up .6s ease forwards; }
-
-  /* GALLERY */
   .gallery-section { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%); }
   .gallery { display: flex; gap: 16px; overflow-x: auto; padding: 8px 0 24px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
   .gallery::-webkit-scrollbar { height: 4px; }
@@ -176,7 +151,6 @@
   .shot img { width: 100%; display: block; aspect-ratio: 9/20; object-fit: cover; }
   .shot-label { padding: 8px 12px; font-size: 12px; font-weight: 600; color: var(--text-3); }
 
-  /* LIGHTBOX */
   .lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; padding: 40px; backdrop-filter: blur(8px); cursor: zoom-out; }
   .lightbox.open { display: flex; animation: lb-fade .2s ease; }
   @keyframes lb-fade { from { opacity: 0; } to { opacity: 1; } }
@@ -189,7 +163,6 @@
   .lightbox-nav.next { right: 20px; }
   @media (max-width: 600px) { .lightbox-nav { display: none; } }
 
-  /* STATS / INTEGRATIONS */
   .stats { background: var(--text); }
   .stats .section-head h2 { color: white; }
   .stats .section-head p { color: var(--muted); }
@@ -197,7 +170,6 @@
   .stat-num { font-size: 40px; font-weight: 900; color: var(--primary); margin-bottom: 4px; }
   .stat-label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
 
-  /* HARDWARE */
   .hw-section { background: var(--bg-alt); }
   .hw-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
   .hw-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; text-align: center; min-width: 130px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); transition: all .15s; }
@@ -206,7 +178,6 @@
   .hw-item .hw-name { font-weight: 700; font-size: 14px; }
   .hw-item .hw-desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
 
-  /* USE CASES */
   .uc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
   .uc-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; align-items: start; transition: all .15s; }
   .uc-item:hover { border-color: var(--primary); box-shadow: 0 2px 8px -2px rgba(0,0,0,0.08); }
@@ -214,14 +185,12 @@
   .uc-item h4 { font-size: 15px; margin-bottom: 2px; font-weight: 700; }
   .uc-item p { color: var(--text-3); font-size: 13px; }
 
-  /* CTA */
   .cta-band { background: var(--text); color: white; text-align: center; padding: 64px 0; position: relative; overflow: hidden; }
   .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(59,130,246,0.2), transparent); }
   .cta-band .container { position: relative; }
   .cta-band h2 { font-size: 30px; font-weight: 800; margin-bottom: 12px; }
   .cta-band p { color: var(--muted); margin-bottom: 28px; font-size: 17px; }
 
-  /* CONTACT + FOOTER */
   .contact { padding: 56px 0; background: var(--text); color: white; border-top: 1px solid rgba(255,255,255,0.06); }
   .contact-inner { text-align: center; }
   .contact h3 { font-size: 22px; margin-bottom: 6px; }
@@ -232,7 +201,6 @@
   footer a:hover { color: var(--primary); }
   footer .links { margin-top: 8px; }
 
-  /* REVEAL */
   .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
   .reveal.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } html { scroll-behavior: auto; } }
@@ -240,7 +208,6 @@
 </head>
 <body>
 
-<!-- SVG ICON DEFS -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="i-operations" viewBox="0 0 24 24"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></symbol>
@@ -259,21 +226,18 @@
     <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
-    <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="6" rx="2"/><rect x="2" y="13" width="20" height="6" rx="2"/><path d="M6 6h.01M6 16h.01"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
     <symbol id="i-chevron-l" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
     <symbol id="i-chevron-r" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
   </defs>
 </svg>
 
-<!-- NAV -->
 <nav>
   <div class="nav-inner">
     <a href="#" class="logo"><img src="icon.png" alt="Simple TSD"><span>Simple TSD</span></a>
     <div class="nav-links">
-      <a href="#features">Возможности</a>
       <a href="#how">Как работает</a>
-      <a href="#flow">Операции</a>
+      <a href="#features">Возможности</a>
       <a href="#screenshots">Скриншоты</a>
       <a href="#hardware">Оборудование</a>
       <a href="#contacts">Контакты</a>
@@ -281,7 +245,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="container">
     <div class="hero-grid">
@@ -304,72 +267,56 @@
   </div>
 </div>
 
-<!-- HOW IT WORKS — animated SVG scenes -->
+<!-- HOW IT WORKS — all 6 scenes in ONE dark section -->
 <section id="how" class="how-section">
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">Процесс</span>
       <h2>Как это работает</h2>
-      <p>От сканирования до синхронизации — всё автоматизировано</p>
+      <p>От сканирования до отгрузки — каждый шаг автоматизирован</p>
     </div>
     <div class="how-grid">
 
-      <!-- SCENE 1: Barcode scanning -->
+      <!-- 1. SCAN -->
       <div class="how-card reveal">
         <div class="how-scene">
           <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
-            <!-- Phone frame -->
             <rect x="30" y="15" width="120" height="150" rx="16" stroke="#334155" stroke-width="2" fill="rgba(59,130,246,0.03)"/>
-            <!-- Viewfinder corners -->
             <path d="M50 60V45a5 5 0 015-5h15" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
             <path d="M110 40h15a5 5 0 015 5v15" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
             <path d="M130 120v15a5 5 0 01-5 5h-15" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
             <path d="M70 140H55a5 5 0 01-5-5v-15" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
-            <!-- Barcode bars -->
-            <rect x="60" y="70" width="4" height="40" fill="#64748B"/>
-            <rect x="68" y="70" width="2" height="40" fill="#64748B"/>
-            <rect x="74" y="70" width="6" height="40" fill="#64748B"/>
-            <rect x="84" y="70" width="2" height="40" fill="#64748B"/>
-            <rect x="90" y="70" width="4" height="40" fill="#64748B"/>
-            <rect x="98" y="70" width="8" height="40" fill="#64748B"/>
-            <rect x="110" y="70" width="2" height="40" fill="#64748B"/>
-            <rect x="116" y="70" width="4" height="40" fill="#64748B"/>
-            <!-- Scan line -->
+            <rect x="60" y="70" width="4" height="40" fill="#64748B"/><rect x="68" y="70" width="2" height="40" fill="#64748B"/><rect x="74" y="70" width="6" height="40" fill="#64748B"/><rect x="84" y="70" width="2" height="40" fill="#64748B"/><rect x="90" y="70" width="4" height="40" fill="#64748B"/><rect x="98" y="70" width="8" height="40" fill="#64748B"/><rect x="110" y="70" width="2" height="40" fill="#64748B"/><rect x="116" y="70" width="4" height="40" fill="#64748B"/>
             <line x1="50" y1="65" x2="130" y2="65" stroke="#3B82F6" stroke-width="2.5" class="anim-scan-line"/>
-            <!-- Flash overlay -->
             <rect x="40" y="35" width="100" height="100" fill="#3B82F6" rx="10" class="anim-scan-flash"/>
-            <!-- Success checkmark -->
-            <circle cx="90" cy="90" r="16" fill="#22C55E" class="anim-scan-check"/>
-            <path d="M82 90l6 6 12-12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="anim-scan-check"/>
+            <g class="anim-scan-check"><circle cx="90" cy="90" r="16" fill="#22C55E"/><path d="M82 90l6 6 12-12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
           </svg>
         </div>
         <h3>Сканирование</h3>
         <p>Наведите камеру или нажмите кнопку сканера — штрихкод распознаётся мгновенно</p>
       </div>
 
-      <!-- SCENE 2: Item placement -->
+      <!-- 2. PLACEMENT — FIXED: A-01 → B-03 -->
       <div class="how-card reveal">
         <div class="how-scene">
           <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
-            <!-- Shelf 2x3 -->
             <rect x="15" y="15" width="55" height="42" rx="5" fill="none" stroke="#334155" stroke-width="1.5"/>
             <rect x="82" y="15" width="55" height="42" rx="5" fill="none" stroke="#334155" stroke-width="1.5"/>
             <rect x="149" y="15" width="55" height="42" rx="5" fill="none" stroke="#334155" stroke-width="1.5"/>
             <rect x="15" y="70" width="55" height="42" rx="5" fill="none" stroke="#334155" stroke-width="1.5"/>
             <rect x="82" y="70" width="55" height="42" rx="5" fill="none" stroke="#334155" stroke-width="1.5"/>
             <rect x="149" y="70" width="55" height="42" rx="5" fill="none" stroke="#334155" stroke-width="1.5"/>
-            <!-- Labels -->
             <text x="42" y="40" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter">A-01</text>
             <text x="109" y="40" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter">A-02</text>
             <text x="176" y="40" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter">A-03</text>
             <text x="42" y="95" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter">B-01</text>
             <text x="109" y="95" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter">B-02</text>
             <text x="176" y="95" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter">B-03</text>
-            <!-- Flash on target cell -->
+            <!-- flash B-03 -->
             <rect x="149" y="70" width="55" height="42" rx="5" class="anim-cell-flash"/>
-            <!-- Animated path -->
-            <path d="M42 36 Q 80 5, 120 36 L 176 91" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="5 5" fill="none" opacity="0.4" class="anim-path"/>
-            <!-- Moving box -->
+            <!-- path: A-01 up → over → down to B-03 -->
+            <path d="M42 36 L 42 8 L 176 8 L 176 91" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="5 5" fill="none" opacity="0.4" class="anim-path"/>
+            <!-- box starts at A-01 center (42,36), moves to B-03 center (176,91) -->
             <g transform="translate(42, 36)"><g class="anim-item">
               <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#3B82F6"/>
               <path d="M-12 -6h24M-6 -12v-4M6 -12v-4" stroke="#2563EB" stroke-width="1.5"/>
@@ -377,150 +324,97 @@
           </svg>
         </div>
         <h3>Размещение</h3>
-        <p>Товар перемещается между ячейками. Адресное хранение с точным учётом по зонам и стеллажам</p>
+        <p>Товар перемещается из A-01 в B-03. Адресное хранение по зонам, стеллажам и полкам</p>
       </div>
 
-      <!-- SCENE 3: Sync -->
+      <!-- 3. SYNC -->
       <div class="how-card reveal">
         <div class="how-scene">
           <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
-            <!-- Phone -->
             <rect x="15" y="40" width="45" height="80" rx="10" stroke="#3B82F6" stroke-width="2" fill="rgba(59,130,246,0.05)"/>
             <rect x="22" y="52" width="31" height="48" rx="3" fill="#3B82F6" opacity="0.12"/>
             <circle cx="37" cy="110" r="2.5" fill="#3B82F6"/>
             <text x="37" y="140" text-anchor="middle" fill="#64748B" font-size="11" font-family="Inter" font-weight="600">TSD</text>
-            <!-- Server -->
             <rect x="160" y="35" width="45" height="32" rx="5" stroke="#0D9488" stroke-width="2" fill="rgba(13,148,136,0.05)"/>
             <rect x="160" y="75" width="45" height="32" rx="5" stroke="#0D9488" stroke-width="2" fill="rgba(13,148,136,0.05)"/>
-            <circle cx="170" cy="51" r="2.5" fill="#0D9488"/>
-            <circle cx="170" cy="91" r="2.5" fill="#0D9488"/>
+            <circle cx="170" cy="51" r="2.5" fill="#0D9488"/><circle cx="170" cy="91" r="2.5" fill="#0D9488"/>
             <text x="182" y="130" text-anchor="middle" fill="#64748B" font-size="11" font-family="Inter" font-weight="600">1С / Server</text>
-            <!-- Connection line with pulse -->
             <line x1="62" y1="75" x2="158" y2="75" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 4" class="anim-sync-pulse"/>
-            <!-- Dots right (upload) -->
-            <circle cx="62" cy="75" r="3.5" fill="#3B82F6" class="anim-dot-r1"/>
-            <circle cx="62" cy="75" r="3.5" fill="#3B82F6" class="anim-dot-r2"/>
-            <circle cx="62" cy="75" r="3.5" fill="#3B82F6" class="anim-dot-r3"/>
-            <!-- Dots left (download) -->
-            <circle cx="158" cy="65" r="3.5" fill="#0D9488" class="anim-dot-l1"/>
-            <circle cx="158" cy="65" r="3.5" fill="#0D9488" class="anim-dot-l2"/>
-            <circle cx="158" cy="65" r="3.5" fill="#0D9488" class="anim-dot-l3"/>
+            <circle cx="62" cy="75" r="3.5" fill="#3B82F6" class="anim-dot-r1"/><circle cx="62" cy="75" r="3.5" fill="#3B82F6" class="anim-dot-r2"/><circle cx="62" cy="75" r="3.5" fill="#3B82F6" class="anim-dot-r3"/>
+            <circle cx="158" cy="65" r="3.5" fill="#0D9488" class="anim-dot-l1"/><circle cx="158" cy="65" r="3.5" fill="#0D9488" class="anim-dot-l2"/><circle cx="158" cy="65" r="3.5" fill="#0D9488" class="anim-dot-l3"/>
           </svg>
         </div>
         <h3>Синхронизация</h3>
-        <p>Двусторонний обмен с 1С и сервером: товары, цены, остатки, документы. Автоматически при подключении</p>
+        <p>Двусторонний обмен с 1С: товары, цены, остатки, документы. Автоматически при подключении</p>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- OPERATIONS FLOW — more animated scenes -->
-<section id="flow">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Операции</span>
-      <h2>Полный цикл складских операций</h2>
-      <p>От приёмки до отгрузки — каждый шаг автоматизирован</p>
-    </div>
-    <div class="how-grid">
-
-      <!-- SCENE 4: Receiving -->
-      <div class="how-card reveal" style="background: var(--surface); border-color: var(--border);">
+      <!-- 4. RECEIVING -->
+      <div class="how-card reveal">
         <div class="how-scene">
           <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
-            <!-- Warehouse floor -->
-            <rect x="20" y="140" width="180" height="20" rx="4" fill="#E2E8F0"/>
-            <text x="110" y="155" text-anchor="middle" fill="#64748B" font-size="11" font-family="Inter" font-weight="600">СКЛАД</text>
-            <!-- Truck -->
+            <rect x="20" y="140" width="180" height="20" rx="4" fill="#1E293B" opacity="0.5"/>
+            <text x="110" y="155" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter" font-weight="600">СКЛАД</text>
             <g class="anim-truck">
               <rect x="30" y="80" width="80" height="50" rx="6" fill="#3B82F6"/>
               <rect x="110" y="95" width="35" height="35" rx="4" fill="#2563EB"/>
               <rect x="115" y="100" width="25" height="15" rx="2" fill="#93C5FD"/>
-              <circle cx="55" cy="135" r="10" fill="#1E293B"/>
-              <circle cx="55" cy="135" r="5" fill="#475569"/>
-              <circle cx="125" cy="135" r="10" fill="#1E293B"/>
-              <circle cx="125" cy="135" r="5" fill="#475569"/>
+              <circle cx="55" cy="135" r="10" fill="#1E293B"/><circle cx="55" cy="135" r="5" fill="#475569"/>
+              <circle cx="125" cy="135" r="10" fill="#1E293B"/><circle cx="125" cy="135" r="5" fill="#475569"/>
             </g>
-            <!-- Box dropping -->
             <g transform="translate(70, 75)"><g class="anim-box-drop">
               <rect x="-14" y="-14" width="28" height="28" rx="4" fill="#F59E0B"/>
               <path d="M-14 -7h28M-7 -14v-4M7 -14v-4" stroke="#D97706" stroke-width="1.5"/>
             </g></g>
-            <!-- Arrow down -->
             <path d="M70 115v20M65 130l5 5 5-5" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" class="anim-arrow"/>
           </svg>
         </div>
-        <h3 style="color: var(--text);">Приёмка</h3>
-        <p style="color: var(--text-3);">Товар приходит от поставщика — сканируйте и размещайте по ячейкам</p>
+        <h3>Приёмка</h3>
+        <p>Товар приходит от поставщика — сканируйте и размещайте по ячейкам</p>
       </div>
 
-      <!-- SCENE 5: Picking -->
-      <div class="how-card reveal" style="background: var(--surface); border-color: var(--border);">
+      <!-- 5. PICKING -->
+      <div class="how-card reveal">
         <div class="how-scene">
           <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
-            <!-- Order card -->
-            <rect x="30" y="15" width="160" height="130" rx="10" fill="white" stroke="#E2E8F0" stroke-width="1.5"/>
-            <text x="110" y="38" text-anchor="middle" fill="#0F172A" font-size="13" font-family="Inter" font-weight="700">Заказ #1024</text>
-            <!-- Items -->
-            <rect x="45" y="50" width="130" height="22" rx="5" fill="#F1F5F9"/>
-            <text x="55" y="65" fill="#334155" font-size="11" font-family="Inter">Молоко Простоквашино</text>
-            <circle cx="168" cy="61" r="8" fill="#22C55E" class="anim-pick-1"/>
-            <path d="M164 61l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" class="anim-pick-1"/>
-            <rect x="45" y="78" width="130" height="22" rx="5" fill="#F1F5F9"/>
-            <text x="55" y="93" fill="#334155" font-size="11" font-family="Inter">Хлеб Бородинский</text>
-            <circle cx="168" cy="89" r="8" fill="#22C55E" class="anim-pick-2"/>
-            <path d="M164 89l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" class="anim-pick-2"/>
-            <rect x="45" y="106" width="130" height="22" rx="5" fill="#F1F5F9"/>
-            <text x="55" y="121" fill="#334155" font-size="11" font-family="Inter">Сыр Российский</text>
-            <circle cx="168" cy="117" r="8" fill="#22C55E" class="anim-pick-3"/>
-            <path d="M164 117l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" class="anim-pick-3"/>
-            <!-- Progress bar -->
-            <rect x="45" y="138" width="130" height="6" rx="3" fill="#E2E8F0"/>
+            <rect x="30" y="15" width="160" height="130" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+            <text x="110" y="38" text-anchor="middle" fill="white" font-size="13" font-family="Inter" font-weight="700">Заказ #1024</text>
+            <rect x="45" y="50" width="130" height="22" rx="5" fill="rgba(255,255,255,0.06)"/>
+            <text x="55" y="65" fill="#CBD5E1" font-size="11" font-family="Inter">Молоко Простоквашино</text>
+            <g class="anim-pick-1"><circle cx="168" cy="61" r="8" fill="#22C55E"/><path d="M164 61l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round"/></g>
+            <rect x="45" y="78" width="130" height="22" rx="5" fill="rgba(255,255,255,0.06)"/>
+            <text x="55" y="93" fill="#CBD5E1" font-size="11" font-family="Inter">Хлеб Бородинский</text>
+            <g class="anim-pick-2"><circle cx="168" cy="89" r="8" fill="#22C55E"/><path d="M164 89l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round"/></g>
+            <rect x="45" y="106" width="130" height="22" rx="5" fill="rgba(255,255,255,0.06)"/>
+            <text x="55" y="121" fill="#CBD5E1" font-size="11" font-family="Inter">Сыр Российский</text>
+            <g class="anim-pick-3"><circle cx="168" cy="117" r="8" fill="#22C55E"/><path d="M164 117l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round"/></g>
+            <rect x="45" y="138" width="130" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
             <rect x="45" y="138" width="130" height="6" rx="3" fill="#3B82F6" class="anim-pick-bar"/>
-            <!-- Done badge -->
-            <g class="anim-pick-done" transform="translate(110, 165)">
-              <rect x="-30" y="-10" width="60" height="20" rx="10" fill="#22C55E"/>
-              <text x="0" y="4" text-anchor="middle" fill="white" font-size="11" font-family="Inter" font-weight="700">Готово</text>
-            </g>
+            <g class="anim-pick-done" transform="translate(110, 165)"><rect x="-30" y="-10" width="60" height="20" rx="10" fill="#22C55E"/><text x="0" y="4" text-anchor="middle" fill="white" font-size="11" font-family="Inter" font-weight="700">Готово</text></g>
           </svg>
         </div>
-        <h3 style="color: var(--text);">Сборка заказа</h3>
-        <p style="color: var(--text-3);">Pick-by-pick: сканируйте товары по одному, отслеживайте прогресс в реальном времени</p>
+        <h3>Сборка заказа</h3>
+        <p>Pick-by-pick: сканируйте товары по одному, отслеживайте прогресс в реальном времени</p>
       </div>
 
-      <!-- SCENE 6: Printing -->
-      <div class="how-card reveal" style="background: var(--surface); border-color: var(--border);">
+      <!-- 6. PRINTING -->
+      <div class="how-card reveal">
         <div class="how-scene">
           <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
-            <!-- Printer -->
-            <rect x="60" y="30" width="100" height="60" rx="8" fill="white" stroke="#334155" stroke-width="2"/>
-            <rect x="70" y="40" width="80" height="8" rx="2" fill="#CBD5E1"/>
+            <rect x="60" y="30" width="100" height="60" rx="8" fill="rgba(255,255,255,0.04)" stroke="#334155" stroke-width="2"/>
+            <rect x="70" y="40" width="80" height="8" rx="2" fill="#475569"/>
             <circle cx="145" cy="55" r="3" fill="#22C55E"/>
-            <!-- Label sliding out -->
             <g transform="translate(110, 95)"><g class="anim-print-label">
-              <rect x="-35" y="0" width="70" height="50" rx="4" fill="white" stroke="#334155" stroke-width="1.5"/>
-              <rect x="-28" y="8" width="56" height="4" rx="1" fill="#94A3B8"/>
-              <rect x="-28" y="16" width="40" height="4" rx="1" fill="#94A3B8"/>
-              <!-- Barcode on label -->
+              <rect x="-35" y="0" width="70" height="50" rx="4" fill="rgba(255,255,255,0.06)" stroke="#334155" stroke-width="1.5"/>
+              <rect x="-28" y="8" width="56" height="4" rx="1" fill="#475569"/>
+              <rect x="-28" y="16" width="40" height="4" rx="1" fill="#475569"/>
               <g class="anim-print-barcode">
-                <rect x="-28" y="26" width="3" height="14" fill="#0F172A"/>
-                <rect x="-23" y="26" width="2" height="14" fill="#0F172A"/>
-                <rect x="-19" y="26" width="4" height="14" fill="#0F172A"/>
-                <rect x="-13" y="26" width="2" height="14" fill="#0F172A"/>
-                <rect x="-9" y="26" width="3" height="14" fill="#0F172A"/>
-                <rect x="-4" y="26" width="5" height="14" fill="#0F172A"/>
-                <rect x="3" y="26" width="2" height="14" fill="#0F172A"/>
-                <rect x="7" y="26" width="3" height="14" fill="#0F172A"/>
-                <rect x="12" y="26" width="4" height="14" fill="#0F172A"/>
-                <rect x="18" y="26" width="2" height="14" fill="#0F172A"/>
-                <rect x="22" y="26" width="3" height="14" fill="#0F172A"/>
+                <rect x="-28" y="26" width="3" height="14" fill="#CBD5E1"/><rect x="-23" y="26" width="2" height="14" fill="#CBD5E1"/><rect x="-19" y="26" width="4" height="14" fill="#CBD5E1"/><rect x="-13" y="26" width="2" height="14" fill="#CBD5E1"/><rect x="-9" y="26" width="3" height="14" fill="#CBD5E1"/><rect x="-4" y="26" width="5" height="14" fill="#CBD5E1"/><rect x="3" y="26" width="2" height="14" fill="#CBD5E1"/><rect x="7" y="26" width="3" height="14" fill="#CBD5E1"/><rect x="12" y="26" width="4" height="14" fill="#CBD5E1"/><rect x="18" y="26" width="2" height="14" fill="#CBD5E1"/><rect x="22" y="26" width="3" height="14" fill="#CBD5E1"/>
               </g>
             </g></g>
           </svg>
         </div>
-        <h3 style="color: var(--text);">Печать этикеток</h3>
-        <p style="color: var(--text-3);">ZPL-этикетки на Bluetooth-принтерах. Шаблоны настраиваются под любой размер</p>
+        <h3>Печать этикеток</h3>
+        <p>ZPL-этикетки на Bluetooth-принтерах. Шаблоны под любой размер</p>
       </div>
 
     </div>
@@ -536,36 +430,12 @@
       <p>От приёмки товара до сборки заказа. Полный набор инструментов для автоматизации.</p>
     </div>
     <div class="features">
-      <div class="feature reveal">
-        <div class="feature-icon"><svg class="icon icon-lg"><use href="#i-operations"/></svg></div>
-        <h3>Гибкие операции</h3>
-        <p>Любые типы складских операций — настраивайте под свои процессы. Приёмка, отгрузка, перемещение, инвентаризация и любые другие.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature-icon teal"><svg class="icon icon-lg"><use href="#i-jobs"/></svg></div>
-        <h3>Сборка заказов</h3>
-        <p>Кастомные схемы заданий под бизнес-процесс. Pick-by-pick, контроль частичных и избыточных количеств, размещение по ячейкам.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature-icon"><svg class="icon icon-lg"><use href="#i-scan"/></svg></div>
-        <h3>Сканер штрихкодов</h3>
-        <p>Камера, Bluetooth SPP, аппаратный сканер ТСД. EAN-13, QR, Code128, DataMatrix, PDF417 — все распространённые форматы.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature-icon teal"><svg class="icon icon-lg"><use href="#i-offline"/></svg></div>
-        <h3>Синхронизация</h3>
-        <p>Двусторонний обмен с сервером: товары, цены, остатки, документы. Автосинхронизация при подключении, очередь офлайн-мутаций.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature-icon"><svg class="icon icon-lg"><use href="#i-print"/></svg></div>
-        <h3>Печать этикеток</h3>
-        <p>Генерация ZPL и печать ценников на Bluetooth-принтерах. Настраиваемые шаблоны под любой размер.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature-icon teal"><svg class="icon icon-lg"><use href="#i-bell"/></svg></div>
-        <h3>Push-уведомления</h3>
-        <p>Мгновенные оповещения о новых заданиях через Firebase Cloud Messaging. Не пропустите важный заказ.</p>
-      </div>
+      <div class="feature reveal"><div class="feature-icon"><svg class="icon icon-lg"><use href="#i-operations"/></svg></div><h3>Гибкие операции</h3><p>Любые типы складских операций — настраивайте под свои процессы. Приёмка, отгрузка, перемещение, инвентаризация и любые другие.</p></div>
+      <div class="feature reveal"><div class="feature-icon teal"><svg class="icon icon-lg"><use href="#i-jobs"/></svg></div><h3>Сборка заказов</h3><p>Кастомные схемы заданий под бизнес-процесс. Pick-by-pick, контроль количеств, размещение по ячейкам.</p></div>
+      <div class="feature reveal"><div class="feature-icon"><svg class="icon icon-lg"><use href="#i-scan"/></svg></div><h3>Сканер штрихкодов</h3><p>Камера, Bluetooth SPP, аппаратный сканер ТСД. EAN-13, QR, Code128, DataMatrix, PDF417.</p></div>
+      <div class="feature reveal"><div class="feature-icon teal"><svg class="icon icon-lg"><use href="#i-offline"/></svg></div><h3>Синхронизация</h3><p>Двусторонний обмен с сервером: товары, цены, остатки, документы. Автосинхронизация, офлайн-очередь.</p></div>
+      <div class="feature reveal"><div class="feature-icon"><svg class="icon icon-lg"><use href="#i-print"/></svg></div><h3>Печать этикеток</h3><p>Генерация ZPL и печать ценников на Bluetooth-принтерах. Настраиваемые шаблоны.</p></div>
+      <div class="feature reveal"><div class="feature-icon teal"><svg class="icon icon-lg"><use href="#i-bell"/></svg></div><h3>Push-уведомления</h3><p>Мгновенные оповещения о новых заданиях через Firebase Cloud Messaging.</p></div>
     </div>
   </div>
 </section>
@@ -652,7 +522,6 @@
   </div>
 </section>
 
-<!-- CTA -->
 <section class="cta-band">
   <div class="container">
     <h2 class="reveal">Начните использовать Simple TSD</h2>
@@ -661,12 +530,10 @@
   </div>
 </section>
 
-<!-- CONTACT -->
 <section class="contact" id="contacts">
   <div class="container"><div class="contact-inner"><h3>FORDEV · Республика Казахстан</h3><a href="mailto:sa@4dev.kz">sa@4dev.kz</a></div></div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="container">
     <p>© 2024–2026 FORDEV. Республика Казахстан.</p>
@@ -678,7 +545,6 @@
   </div>
 </footer>
 
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" onclick="lbClose()"><svg class="icon"><use href="#i-x"/></svg></button>
   <button class="lightbox-nav prev" onclick="lbNav(-1)"><svg class="icon"><use href="#i-chevron-l"/></svg></button>
@@ -687,13 +553,11 @@
 </div>
 
 <script>
-  // Reveal animation
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  // Lightbox
   const gallery = document.getElementById('gallery');
   const lightbox = document.getElementById('lightbox');
   const lbImg = document.getElementById('lb-img');
