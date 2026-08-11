@@ -14,238 +14,282 @@
   :root {
     --primary: #3B82F6;
     --primary-dark: #2563EB;
-    --primary-light: #60A5FA;
-    --teal: #0F766E;
-    --teal-light: #14B8A6;
+    --primary-light: #DBEAFE;
+    --teal: #0D9488;
+    --teal-dark: #0F766E;
+    --teal-light: #CCFBF1;
     --bg: #F8FAFC;
+    --bg-alt: #F1F5F9;
     --surface: #FFFFFF;
     --text: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #94A3B8;
+    --text-2: #334155;
+    --text-3: #64748B;
+    --muted: #94A3B8;
     --border: #E2E8F0;
-    --radius: 16px;
-    --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+    --border-2: #CBD5E1;
+    --radius-sm: 10px;
+    --radius: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 2px 8px -2px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-lg: 0 24px 48px -12px rgba(0,0,0,0.12), 0 8px 16px -8px rgba(0,0,0,0.06);
   }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* ICONS */
+  .icon { width: 24px; height: 24px; stroke-width: 1.8; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .icon-lg { width: 28px; height: 28px; }
 
   /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid rgba(226,232,240,0.7);
   }
-  .nav-content {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 24px; max-width: 1200px; margin: 0 auto;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--primary), var(--teal));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 18px;
-  }
-  .nav-links { display: flex; gap: 32px; }
-  .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 15px; transition: color .2s; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; max-width: 1140px; margin: 0 auto; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: var(--text); text-decoration: none; }
+  .logo img { width: 32px; height: 32px; border-radius: 8px; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-3); text-decoration: none; font-weight: 500; font-size: 14px; transition: color .15s; }
   .nav-links a:hover { color: var(--primary); }
   @media (max-width: 768px) { .nav-links { display: none; } }
 
   /* HERO */
-  .hero {
-    padding: 140px 0 80px;
-    background: linear-gradient(180deg, #EFF6FF 0%, var(--bg) 100%);
-    position: relative; overflow: hidden;
+  .hero { padding: 120px 0 64px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.06), transparent),
+                radial-gradient(ellipse 50% 40% at 100% 50%, rgba(13,148,136,0.05), transparent);
+    pointer-events: none;
   }
-  .hero-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
-  }
-  @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-    .hero { padding: 120px 0 60px; }
-  }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #DBEAFE; color: var(--primary-dark);
-    padding: 6px 14px; border-radius: 999px;
-    font-size: 13px; font-weight: 600; margin-bottom: 24px;
-  }
-  .hero h1 {
-    font-size: 52px; font-weight: 900; line-height: 1.08;
-    letter-spacing: -2px; margin-bottom: 20px;
-  }
-  .hero h1 span {
-    background: linear-gradient(135deg, var(--primary), var(--teal));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .hero p {
-    font-size: 19px; color: var(--text-secondary); margin-bottom: 32px; max-width: 520px;
-  }
-  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
-  .btn-primary {
-    background: var(--primary); color: white; padding: 14px 28px;
-    border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 16px;
-    box-shadow: 0 4px 14px rgba(59,130,246,0.3);
-    transition: all .2s; display: inline-flex; align-items: center; gap: 8px;
-  }
-  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59,130,246,0.4); }
-  .btn-secondary {
-    background: var(--surface); color: var(--text); padding: 14px 28px;
-    border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;
-    border: 1px solid var(--border); transition: all .2s;
-  }
-  .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; position: relative; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } .hero { padding: 100px 0 48px; } }
 
-  /* PHONE MOCKUP */
-  .phone-mockup {
-    position: relative; max-width: 300px; margin: 0 auto;
-    border-radius: 36px; padding: 8px;
-    background: linear-gradient(135deg, #1E293B, #334155);
-    box-shadow: 0 30px 60px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05);
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary-light); color: var(--primary-dark);
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; margin-bottom: 20px;
   }
-  .phone-screen {
-    border-radius: 28px; overflow: hidden; position: relative;
-    aspect-ratio: 9/19.5; background: #000;
+  .hero-tag svg { width: 14px; height: 14px; }
+  .hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 18px; }
+  .hero h1 .accent { color: var(--primary); }
+  .hero .sub { font-size: 18px; color: var(--text-3); margin-bottom: 28px; max-width: 500px; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: var(--radius); font-weight: 600; font-size: 15px;
+    text-decoration: none; transition: all .15s; border: none; cursor: pointer;
   }
-  .phone-screen img { width: 100%; height: 100%; object-fit: cover; }
-  .phone-screen::before {
-    content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-    width: 100px; height: 24px; background: #000; border-radius: 12px; z-index: 2;
+  .btn svg { width: 18px; height: 18px; }
+  .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(59,130,246,0.25); }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(59,130,246,0.3); }
+  .btn-ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* PHONE */
+  .phone-wrap { display: flex; justify-content: center; position: relative; }
+  .phone-wrap::before {
+    content: ''; position: absolute; inset: -40px;
+    background: radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%);
+    z-index: 0;
+  }
+  .phone {
+    position: relative; width: 260px; z-index: 1;
+    background: #1E293B; border-radius: 32px; padding: 6px;
+    box-shadow: 0 30px 60px -16px rgba(15,23,42,0.3), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .phone-screen { border-radius: 26px; overflow: hidden; aspect-ratio: 9/19.5; background: #F8FAFC; position: relative; }
+  .phone-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .phone-notch {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 18px; background: #1E293B; border-radius: 12px; z-index: 2;
   }
 
   /* SECTIONS */
-  section { padding: 80px 0; }
-  .section-header { text-align: center; margin-bottom: 56px; }
-  .section-header h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
-  .section-header p { color: var(--text-secondary); font-size: 18px; max-width: 580px; margin: 0 auto; }
+  section { padding: 72px 0; }
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-head .eyebrow {
+    display: inline-block; color: var(--primary); font-weight: 600; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .section-head h2 { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+  .section-head p { color: var(--text-3); font-size: 17px; max-width: 560px; margin: 0 auto; }
 
-  /* FEATURES — app card style */
-  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-  .feature-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px;
-    transition: all .25s; position: relative; overflow: hidden;
+  /* FEATURES */
+  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  .feature {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; transition: all .2s; position: relative;
   }
-  .feature-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--teal));
-    opacity: 0; transition: opacity .25s;
-  }
-  .feature-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-  .feature-card:hover::before { opacity: 1; }
+  .feature:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
   .feature-icon {
-    width: 52px; height: 52px; border-radius: 14px; margin-bottom: 18px;
-    display: flex; align-items: center; justify-content: center; font-size: 24px;
+    width: 44px; height: 44px; border-radius: 12px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center; color: var(--primary);
   }
-  .feature-icon.blue { background: #DBEAFE; }
-  .feature-icon.teal { background: #CCFBF1; }
-  .feature-icon.purple { background: #EDE9FE; }
-  .feature-icon.amber { background: #FEF3C7; }
-  .feature-icon.pink { background: #FCE7F3; }
-  .feature-icon.green { background: #DCFCE7; }
-  .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-  .feature-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+  .feature-icon.teal { color: var(--teal); }
+  .feature h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .feature p { color: var(--text-3); font-size: 14px; line-height: 1.55; }
 
-  /* SCREENSHOTS GALLERY */
-  .gallery { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0 32px; scroll-snap-type: x mandatory; }
-  .gallery::-webkit-scrollbar { height: 6px; }
-  .gallery::-webkit-scrollbar-track { background: var(--border); border-radius: 3px; }
-  .gallery::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
-  .gallery-item {
-    flex: 0 0 220px; scroll-snap-align: start;
-    border-radius: 16px; overflow: hidden;
+  /* GALLERY */
+  .gallery-section { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%); }
+  .gallery { display: flex; gap: 16px; overflow-x: auto; padding: 8px 0 24px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .gallery::-webkit-scrollbar { height: 4px; }
+  .gallery::-webkit-scrollbar-track { background: var(--border); border-radius: 2px; }
+  .gallery::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 2px; }
+  .shot {
+    flex: 0 0 200px; scroll-snap-align: start; border-radius: 14px; overflow: hidden;
     border: 1px solid var(--border); background: var(--surface);
-    box-shadow: var(--shadow); transition: transform .25s;
+    box-shadow: var(--shadow); transition: transform .2s;
   }
-  .gallery-item:hover { transform: scale(1.04); }
-  .gallery-item img { width: 100%; display: block; aspect-ratio: 9/19.5; object-fit: cover; }
-  .gallery-item .caption { padding: 10px 14px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+  .shot:hover { transform: scale(1.05); }
+  .shot img { width: 100%; display: block; aspect-ratio: 9/19.5; object-fit: cover; }
+  .shot-label { padding: 8px 12px; font-size: 12px; font-weight: 600; color: var(--text-3); }
 
   /* STATS */
-  .stats-section { background: var(--text); color: white; }
-  .stats-section h2 { color: white; }
-  .stats-section .section-header p { color: var(--text-muted); }
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 24px; text-align: center; margin-top: 40px;
-  }
-  .stat-value {
-    font-size: 44px; font-weight: 900; margin-bottom: 4px;
-    background: linear-gradient(135deg, var(--primary-light), var(--teal-light));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .stat-label { color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; }
-
-  /* USE CASES */
-  .use-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
-  .use-case {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 22px; display: flex; gap: 14px; align-items: start;
-  }
-  .use-case-icon { font-size: 28px; flex-shrink: 0; }
-  .use-case h4 { font-size: 16px; margin-bottom: 4px; }
-  .use-case p { color: var(--text-secondary); font-size: 14px; }
+  .stats { background: var(--text); }
+  .stats .section-head h2 { color: white; }
+  .stats .section-head p { color: var(--muted); }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; text-align: center; }
+  .stat-num { font-size: 40px; font-weight: 900; color: var(--primary); margin-bottom: 4px; }
+  .stat-label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
 
   /* HARDWARE */
-  .hardware-section { background: linear-gradient(135deg, #EFF6FF, #F0FDFA); }
-  .hardware-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-  .hardware-item {
+  .hw-section { background: var(--bg-alt); }
+  .hw-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .hw-item {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px 24px; text-align: center; min-width: 140px;
-    box-shadow: var(--shadow);
+    border-radius: var(--radius); padding: 18px 22px; text-align: center; min-width: 130px;
+    box-shadow: var(--shadow-sm); transition: all .15s;
   }
-  .hardware-item .hw-icon { font-size: 32px; margin-bottom: 8px; }
-  .hardware-item .hw-name { font-weight: 700; font-size: 15px; }
-  .hardware-item .hw-desc { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+  .hw-item:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .hw-item .hw-icon { color: var(--text-2); margin-bottom: 8px; display: flex; justify-content: center; }
+  .hw-item .hw-name { font-weight: 700; font-size: 14px; }
+  .hw-item .hw-desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* USE CASES */
+  .uc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .uc-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; align-items: start;
+    transition: all .15s;
+  }
+  .uc-item:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+  .uc-icon { color: var(--primary); flex-shrink: 0; width: 40px; height: 40px; background: var(--primary-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .uc-item h4 { font-size: 15px; margin-bottom: 2px; font-weight: 700; }
+  .uc-item p { color: var(--text-3); font-size: 13px; }
 
   /* CTA */
-  .cta-section {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--teal) 100%);
-    color: white; text-align: center; padding: 80px 0;
+  .cta-band {
+    background: var(--text); color: white; text-align: center; padding: 64px 0;
+    position: relative; overflow: hidden;
   }
-  .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
-  .cta-section p { font-size: 18px; opacity: 0.95; margin-bottom: 32px; }
-  .cta-section .btn-primary {
-    background: white; color: var(--primary-dark); box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  .cta-band::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(59,130,246,0.2), transparent);
   }
-  .cta-section .btn-primary:hover { background: #F1F5F9; transform: translateY(-2px); }
+  .cta-band .container { position: relative; }
+  .cta-band h2 { font-size: 30px; font-weight: 800; margin-bottom: 12px; }
+  .cta-band p { color: var(--muted); margin-bottom: 28px; font-size: 17px; }
 
   /* CONTACT */
-  .contact-section { padding: 60px 0; background: var(--text); color: white; text-align: center; }
-  .contact-section h2 { font-size: 28px; margin-bottom: 8px; }
-  .contact-section a {
-    color: var(--primary-light); font-size: 20px; font-weight: 600; text-decoration: none;
-  }
-  .contact-section a:hover { text-decoration: underline; }
+  .contact { padding: 56px 0; background: var(--text); color: white; border-top: 1px solid rgba(255,255,255,0.06); }
+  .contact-inner { text-align: center; }
+  .contact h3 { font-size: 22px; margin-bottom: 6px; }
+  .contact a { color: var(--primary); font-size: 18px; font-weight: 600; text-decoration: none; }
+  .contact a:hover { text-decoration: underline; }
 
   /* FOOTER */
-  footer { background: #020617; color: var(--text-muted); padding: 32px 0; text-align: center; font-size: 14px; }
-  footer a { color: var(--primary-light); text-decoration: none; margin: 0 6px; }
-  footer a:hover { text-decoration: underline; }
+  footer { background: #020617; color: var(--muted); padding: 28px 0; text-align: center; font-size: 13px; }
+  footer a { color: var(--text-3); text-decoration: none; margin: 0 6px; transition: color .15s; }
+  footer a:hover { color: var(--primary); }
+  footer .links { margin-top: 8px; }
 
-  /* SCROLL ANIMATION */
-  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s; }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  /* ANIMATIONS */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
 <body>
 
+<!-- SVG ICON DEFS -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-operations" viewBox="0 0 24 24">
+      <path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+    </symbol>
+    <symbol id="i-jobs" viewBox="0 0 24 24">
+      <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 002 2h2a2 2 0 002-2m-6 6l2 2 4-4"/>
+    </symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24">
+      <path d="M4 7V5a1 1 0 011-1h2M17 4h2a1 1 0 011 1v2M20 17v2a1 1 0 01-1 1h-2M7 20H5a1 1 0 01-1-1v-2M4 12h16"/>
+      <path d="M7 10v4M10 10v4M13 10v4M17 10v4" stroke-width="2.5"/>
+    </symbol>
+    <symbol id="i-offline" viewBox="0 0 24 24">
+      <path d="M20 7l-3 3-3-3M17 10V4M4 12a8 8 0 0114-5M4 17l3-3 3 3M7 14v6"/>
+      <path d="M17 14v3a3 3 0 01-3 3H8"/>
+    </symbol>
+    <symbol id="i-print" viewBox="0 0 24 24">
+      <path d="M6 9V3h12v6M6 18H4a2 2 0 01-2-2v-3a2 2 0 012-2h16a2 2 0 012 2v3a2 2 0 01-2 2h-2M6 14h12v7H6z"/>
+    </symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24">
+      <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/>
+    </symbol>
+    <symbol id="i-box" viewBox="0 0 24 24">
+      <path d="M21 16V8a2 2 0 00-1-1.7l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.7l7 4a2 2 0 002 0l7-4A2 2 0 0021 16zM3.3 7L12 12l8.7-5M12 22V12"/>
+    </symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24">
+      <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/>
+      <circle cx="5.5" cy="18.5" r="2.5"/>
+      <circle cx="18.5" cy="18.5" r="2.5"/>
+    </symbol>
+    <symbol id="i-factory" viewBox="0 0 24 24">
+      <path d="M2 20h20M4 20V8l5 3V8l5 3V8l5 3v9M8 20v-4M13 20v-4M18 20v-4"/>
+    </symbol>
+    <symbol id="i-warehouse" viewBox="0 0 24 24">
+      <path d="M3 21V9l9-6 9 6v12M3 21h18M7 21v-6h4v6M14 11v4M14 15v4"/>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24">
+      <rect x="6" y="2" width="12" height="20" rx="2.5"/>
+      <path d="M11 18h2"/>
+    </symbol>
+    <symbol id="i-bt" viewBox="0 0 24 24">
+      <path d="M7 7l10 10-5 4V3l5 4L7 17"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="M20 6L9 17l-5-5"/>
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+    </symbol>
+  </defs>
+</svg>
+
 <!-- NAV -->
 <nav>
-  <div class="nav-content">
-    <div class="logo">
-      <div class="logo-icon">📱</div>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <img src="icon.png" alt="Simple TSD">
       <span>Simple TSD</span>
-    </div>
+    </a>
     <div class="nav-links">
       <a href="#features">Возможности</a>
       <a href="#screenshots">Скриншоты</a>
@@ -259,17 +303,27 @@
 <div class="hero">
   <div class="container">
     <div class="hero-grid">
-      <div>
-        <div class="hero-badge">📦 Версия 1.0 доступна в Google Play</div>
-        <h1>Складские операции <span>в кармане</span></h1>
-        <p>Simple TSD — мобильное приложение для терминалов сбора данных. Приёмка, отгрузка, инвентаризация, сборка заказов. Работает офлайн, синхронизируется автоматически.</p>
+      <div class="reveal">
+        <div class="hero-tag">
+          <svg class="icon"><use href="#i-check"/></svg>
+          Версия 1.0 в Google Play
+        </div>
+        <h1>Складские операции<br><span class="accent">на терминале сбора данных</span></h1>
+        <p class="sub">Simple TSD — приложение для приёмки, отгрузки, инвентаризации и сборки заказов. Работает офлайн на Android-смартфонах и профессиональных ТСД.</p>
         <div class="hero-cta">
-          <a href="#contacts" class="btn-primary">⬇ Скачать из Google Play</a>
-          <a href="#screenshots" class="btn-secondary">Посмотреть скриншоты</a>
+          <a href="#contacts" class="btn btn-primary">
+            <svg class="icon"><use href="#i-download"/></svg>
+            Скачать
+          </a>
+          <a href="#screenshots" class="btn btn-ghost">
+            Скриншоты
+            <svg class="icon"><use href="#i-arrow-right"/></svg>
+          </a>
         </div>
       </div>
-      <div>
-        <div class="phone-mockup">
+      <div class="phone-wrap reveal">
+        <div class="phone">
+          <div class="phone-notch"></div>
           <div class="phone-screen">
             <img src="screenshots/01_home.png" alt="Simple TSD — главный экран">
           </div>
@@ -282,38 +336,51 @@
 <!-- FEATURES -->
 <section id="features">
   <div class="container">
-    <div class="section-header fade-in">
+    <div class="section-head reveal">
+      <span class="eyebrow">Возможности</span>
       <h2>Всё для склада — в одном приложении</h2>
-      <p>Полный набор инструментов для автоматизации складских операций. От приёмки до отгрузки.</p>
+      <p>От приёмки товара до сборки заказа. Полный набор инструментов для автоматизации складских операций.</p>
     </div>
     <div class="features">
-      <div class="feature-card fade-in">
-        <div class="feature-icon blue">📥</div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg class="icon icon-lg"><use href="#i-operations"/></svg>
+        </div>
         <h3>6 типов операций</h3>
-        <p>Приёмка, отгрузка, перемещение, инвентаризация, списание, оприходование. Все операции — в одном меню.</p>
+        <p>Приёмка, отгрузка, перемещение, инвентаризация, списание, оприходование — в одном меню.</p>
       </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon teal">🎯</div>
+      <div class="feature reveal">
+        <div class="feature-icon teal">
+          <svg class="icon icon-lg"><use href="#i-jobs"/></svg>
+        </div>
         <h3>Сборка заказов</h3>
         <p>Пошаговые задания с pick-by-pick сценарием. Контроль частичных и избыточных количеств.</p>
       </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon purple">📷</div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg class="icon icon-lg"><use href="#i-scan"/></svg>
+        </div>
         <h3>Сканер штрихкодов</h3>
         <p>Камера, Bluetooth SPP, аппаратный сканер ТСД. EAN-13, QR, Code128, DataMatrix, PDF417.</p>
       </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon amber">🔄</div>
+      <div class="feature reveal">
+        <div class="feature-icon teal">
+          <svg class="icon icon-lg"><use href="#i-offline"/></svg>
+        </div>
         <h3>Offline-first</h3>
         <p>Полная работа без интернета. Локальная база Hive, очередь мутаций, автосинхронизация.</p>
       </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon pink">🖨️</div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg class="icon icon-lg"><use href="#i-print"/></svg>
+        </div>
         <h3>Печать этикеток</h3>
         <p>Генерация ZPL и печать ценников на Bluetooth-принтерах. Готовые шаблоны.</p>
       </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon green">🔔</div>
+      <div class="feature reveal">
+        <div class="feature-icon teal">
+          <svg class="icon icon-lg"><use href="#i-bell"/></svg>
+        </div>
         <h3>Push-уведомления</h3>
         <p>Мгновенные оповещения о новых заданиях через Firebase Cloud Messaging.</p>
       </div>
@@ -322,108 +389,111 @@
 </section>
 
 <!-- SCREENSHOTS -->
-<section id="screenshots" style="background: linear-gradient(180deg, var(--bg) 0%, #EFF6FF 100%);">
+<section id="screenshots" class="gallery-section">
   <div class="container">
-    <div class="section-header fade-in">
+    <div class="section-head reveal">
+      <span class="eyebrow">Интерфейс</span>
       <h2>Экраны приложения</h2>
       <p>Чистый, понятный интерфейс. Адаптируется под телефон и планшет.</p>
     </div>
     <div class="gallery">
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/01_home.png" alt="Главный экран">
-        <div class="caption">Главный экран</div>
+        <div class="shot-label">Главный экран</div>
       </div>
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/02_operations.png" alt="Операции">
-        <div class="caption">Складские операции</div>
+        <div class="shot-label">Складские операции</div>
       </div>
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/03_jobs.png" alt="Задания">
-        <div class="caption">Сборка заказов</div>
+        <div class="shot-label">Сборка заказов</div>
       </div>
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/04_stock.png" alt="Товары">
-        <div class="caption">Поиск товаров</div>
+        <div class="shot-label">Поиск товаров</div>
       </div>
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/05_item_detail.png" alt="Карточка товара">
-        <div class="caption">Карточка товара</div>
+        <div class="shot-label">Карточка товара</div>
       </div>
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/06_printing.png" alt="Печать этикеток">
-        <div class="caption">Печать ценников</div>
+        <div class="shot-label">Печать ценников</div>
       </div>
-      <div class="gallery-item">
+      <div class="shot">
         <img src="screenshots/07_settings.png" alt="Настройки">
-        <div class="caption">Настройки</div>
+        <div class="shot-label">Настройки</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- STATS -->
-<section class="stats-section">
+<section class="stats">
   <div class="container">
-    <div class="section-header fade-in">
-      <h2>Цифры</h2>
-      <p>Технологии, которые работают на твоём складе</p>
+    <div class="section-head reveal">
+      <span class="eyebrow" style="color: var(--primary);">Технологии</span>
+      <h2>Проверено на практике</h2>
+      <p>Технологии, которые работают на реальных складах</p>
     </div>
-    <div class="stats-grid fade-in">
+    <div class="stats-grid reveal">
       <div>
-        <div class="stat-value">6+</div>
+        <div class="stat-num">6+</div>
         <div class="stat-label">Типов операций</div>
       </div>
       <div>
-        <div class="stat-value">10+</div>
+        <div class="stat-num">10+</div>
         <div class="stat-label">Форматов кодов</div>
       </div>
       <div>
-        <div class="stat-value">3</div>
-        <div class="stat-label">Языка интерфейса</div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Языка</div>
       </div>
       <div>
-        <div class="stat-value">∞</div>
-        <div class="stat-label">Складов и ячеек</div>
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Offline</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- HARDWARE -->
-<section id="hardware" class="hardware-section">
+<section id="hardware" class="hw-section">
   <div class="container">
-    <div class="section-header fade-in">
+    <div class="section-head reveal">
+      <span class="eyebrow">Совместимость</span>
       <h2>Поддерживаемое оборудование</h2>
-      <p>Работает на обычных Android-смартфонах и профессиональных ТСД</p>
+      <p>Работает на обычных смартфонах и профессиональных ТСД</p>
     </div>
-    <div class="hardware-grid fade-in">
-      <div class="hardware-item">
-        <div class="hw-icon">📱</div>
-        <div class="hw-name">Android смартфон</div>
-        <div class="hw-desc">Любой с камерой</div>
+    <div class="hw-grid reveal">
+      <div class="hw-item">
+        <div class="hw-icon"><svg class="icon icon-lg"><use href="#i-phone"/></svg></div>
+        <div class="hw-name">Android</div>
+        <div class="hw-desc">Любой смартфон</div>
       </div>
-      <div class="hardware-item">
-        <div class="hw-icon">🔧</div>
+      <div class="hw-item">
+        <div class="hw-icon"><svg class="icon icon-lg"><use href="#i-scan"/></svg></div>
         <div class="hw-name">Urovo</div>
-        <div class="hw-desc">ТСД с hardware scanner</div>
+        <div class="hw-desc">Hardware scanner</div>
       </div>
-      <div class="hardware-item">
-        <div class="hw-icon">zebra</div>
+      <div class="hw-item">
+        <div class="hw-icon"><svg class="icon icon-lg"><use href="#i-box"/></svg></div>
         <div class="hw-name">Zebra</div>
-        <div class="hw-desc">TC-series, etс.</div>
+        <div class="hw-desc">TC-series</div>
       </div>
-      <div class="hardware-item">
-        <div class="hw-icon">🔲</div>
+      <div class="hw-item">
+        <div class="hw-icon"><svg class="icon icon-lg"><use href="#i-scan"/></svg></div>
         <div class="hw-name">Honeywell</div>
-        <div class="hw-desc">CT60, EDA50, etс.</div>
+        <div class="hw-desc">CT60, EDA50</div>
       </div>
-      <div class="hardware-item">
-        <div class="hw-icon">📶</div>
+      <div class="hw-item">
+        <div class="hw-icon"><svg class="icon icon-lg"><use href="#i-bt"/></svg></div>
         <div class="hw-name">Bluetooth SPP</div>
-        <div class="hw-desc">Любые SPP-сканеры</div>
+        <div class="hw-desc">Внешние сканеры</div>
       </div>
-      <div class="hardware-item">
-        <div class="hw-icon">🖨️</div>
+      <div class="hw-item">
+        <div class="hw-icon"><svg class="icon icon-lg"><use href="#i-print"/></svg></div>
         <div class="hw-name">Bluetooth принтер</div>
         <div class="hw-desc">ZPL-совместимые</div>
       </div>
@@ -434,37 +504,38 @@
 <!-- USE CASES -->
 <section>
   <div class="container">
-    <div class="section-header fade-in">
+    <div class="section-head reveal">
+      <span class="eyebrow">Применение</span>
       <h2>Для кого</h2>
       <p>Подходит для разных типов бизнеса</p>
     </div>
-    <div class="use-cases fade-in">
-      <div class="use-case">
-        <div class="use-case-icon">🏪</div>
+    <div class="uc-grid">
+      <div class="uc-item reveal">
+        <div class="uc-icon"><svg class="icon"><use href="#i-box"/></svg></div>
         <div>
           <h4>Розница</h4>
           <p>Приёмка товара, инвентаризация, переоценка, отгрузка в филиалы.</p>
         </div>
       </div>
-      <div class="use-case">
-        <div class="use-case-icon">🚚</div>
+      <div class="uc-item reveal">
+        <div class="uc-icon"><svg class="icon"><use href="#i-truck"/></svg></div>
         <div>
           <h4>E-commerce</h4>
           <p>Сборка заказов по пик-листам, сканирование при отгрузке.</p>
         </div>
       </div>
-      <div class="use-case">
-        <div class="use-case-icon">🏭</div>
+      <div class="uc-item reveal">
+        <div class="uc-icon"><svg class="icon"><use href="#i-factory"/></svg></div>
         <div>
           <h4>Производство</h4>
-          <p>Учёт сырья и готовой продукции, перемещения, списания.</p>
+          <p>Учёт сырья и продукции, перемещения между цехами, списания.</p>
         </div>
       </div>
-      <div class="use-case">
-        <div class="use-case-icon">📦</div>
+      <div class="uc-item reveal">
+        <div class="uc-icon"><svg class="icon"><use href="#i-warehouse"/></svg></div>
         <div>
           <h4>3PL логистика</h4>
-          <p>Адресное хранение, размещение по ячейкам, множественные клиенты.</p>
+          <p>Адресное хранение, размещение по ячейкам, работа с клиентами.</p>
         </div>
       </div>
     </div>
@@ -472,20 +543,24 @@
 </section>
 
 <!-- CTA -->
-<section class="cta-section">
+<section class="cta-band">
   <div class="container">
-    <h2>Начните использовать Simple TSD</h2>
-    <p>Подключите приложение к системе Simple и автоматизируйте свой склад</p>
-    <a href="#contacts" class="btn-primary">Связаться с нами</a>
+    <h2 class="reveal">Начните использовать Simple TSD</h2>
+    <p class="reveal">Подключите приложение к системе Simple и автоматизируйте свой склад</p>
+    <a href="#contacts" class="btn btn-primary reveal">
+      Связаться
+      <svg class="icon"><use href="#i-arrow-right"/></svg>
+    </a>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section class="contact-section" id="contacts">
+<section class="contact" id="contacts">
   <div class="container">
-    <h2>Контакты</h2>
-    <p style="color: var(--text-muted); margin-bottom: 16px;">FORDEV · Республика Казахстан</p>
-    <a href="mailto:sa@4dev.kz">sa@4dev.kz</a>
+    <div class="contact-inner">
+      <h3>FORDEV · Республика Казахстан</h3>
+      <a href="mailto:sa@4dev.kz">sa@4dev.kz</a>
+    </div>
   </div>
 </section>
 
@@ -493,28 +568,24 @@
 <footer>
   <div class="container">
     <p>© 2024–2026 FORDEV. Республика Казахстан.</p>
-    <p style="margin-top: 8px;">
-      <a href="privacy-policy-ru.html">Политика конфиденциальности</a> ·
-      <a href="data-deletion.html">Удаление данных</a> ·
+    <div class="links">
+      <a href="privacy-policy-ru.html">Политика конфиденциальности</a>·
+      <a href="data-deletion.html">Удаление данных</a>·
       <a href="mailto:sa@4dev.kz">sa@4dev.kz</a>
-    </p>
+    </div>
   </div>
 </footer>
 
 <script>
-  // Scroll animation
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      }
     });
-  });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 
 </body>
