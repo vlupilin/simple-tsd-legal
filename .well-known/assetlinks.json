@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "kz.fordev.simple.simple_tsd",
+      "sha256_cert_fingerprints": [
+        "A1:31:1A:97:E0:A8:FD:12:18:4C:EE:78:93:16:F2:AE:9C:53:94:58:B5:12:51:F1:33:BB:5A:83:48:36:4C:64"
+      ]
+    }
+  }
+]
