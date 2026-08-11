@@ -120,11 +120,11 @@
   .anim-dot-l3 { animation: sync-l 2s ease-in-out infinite 1.25s; }
   .anim-sync-pulse { animation: sync-pulse 2s ease-in-out infinite; }
 
-  @keyframes truck-in { 0% { transform: translateX(-80px); opacity: 0; } 15% { transform: translateX(0); opacity: 1; } 80% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
-  @keyframes box-drop { 0%,20% { transform: translate(0,0); opacity: 0; } 25% { opacity: 1; } 45% { transform: translate(0,0); } 60% { transform: translate(0,30px); } 75% { transform: translate(0,30px); opacity: 1; } 90% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes arrow-pulse { 0%,100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(4px); opacity: 1; } }
-  .anim-truck { animation: truck-in 5s ease-in-out infinite; }
-  .anim-box-drop { animation: box-drop 5s ease-in-out infinite; }
+  @keyframes truck-in { 0% { transform: translateX(-120px); opacity: 0; } 12% { transform: translateX(0); opacity: 1; } 85% { transform: translateX(0); opacity: 1; } 95% { transform: translateX(0); opacity: 0; } 100% { transform: translateX(0); opacity: 0; } }
+  @keyframes box-receive { 0%,18% { transform: translate(0,0); opacity: 0; } 22% { opacity: 1; } 30% { transform: translate(0,0); opacity: 1; } 50% { transform: translate(55px,2px); opacity: 1; } 65% { transform: translate(105px,10px); opacity: 0.4; } 72% { transform: translate(105px,10px); opacity: 0; } 100% { transform: translate(0,0); opacity: 0; } }
+  @keyframes arrow-pulse { 0%,100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(2px); opacity: 1; } }
+  .anim-truck { animation: truck-in 6s ease-in-out infinite; }
+  .anim-box-receive { animation: box-receive 6s ease-in-out infinite; }
   .anim-arrow { animation: arrow-pulse 1.5s ease-in-out infinite; }
 
   @keyframes pick-check { 0%,20% { transform: scale(0); opacity: 0; } 25%,90% { transform: scale(1); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
@@ -348,28 +348,58 @@
         <p>Двусторонний обмен с 1С: товары, цены, остатки, документы. Автоматически при подключении</p>
       </div>
 
-      <!-- 4. RECEIVING -->
+      <!-- 4. RECEIVING — outlines: warehouse + truck, box goes INTO warehouse -->
       <div class="how-card reveal">
         <div class="how-scene">
           <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
-            <rect x="20" y="140" width="180" height="20" rx="4" fill="#1E293B" opacity="0.5"/>
-            <text x="110" y="155" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter" font-weight="600">СКЛАД</text>
-            <g class="anim-truck">
-              <rect x="30" y="80" width="80" height="50" rx="6" fill="#3B82F6"/>
-              <rect x="110" y="95" width="35" height="35" rx="4" fill="#2563EB"/>
-              <rect x="115" y="100" width="25" height="15" rx="2" fill="#93C5FD"/>
-              <circle cx="55" cy="135" r="10" fill="#1E293B"/><circle cx="55" cy="135" r="5" fill="#475569"/>
-              <circle cx="125" cy="135" r="10" fill="#1E293B"/><circle cx="125" cy="135" r="5" fill="#475569"/>
+            <!-- Warehouse building (outline only) -->
+            <g stroke="#475569" stroke-width="2" fill="none" stroke-linejoin="round">
+              <!-- Roof -->
+              <path d="M118 58 L 135 42 L 205 42 L 222 58"/>
+              <!-- Building body -->
+              <rect x="120" y="58" width="100" height="72" rx="2"/>
+              <!-- Door / loading dock -->
+              <path d="M152 130 L 152 98 L 188 98 L 188 130"/>
+              <!-- Door threshold -->
+              <path d="M152 110 L 188 110" stroke-dasharray="3 3" opacity="0.5"/>
             </g>
-            <g transform="translate(70, 75)"><g class="anim-box-drop">
-              <rect x="-14" y="-14" width="28" height="28" rx="4" fill="#F59E0B"/>
-              <path d="M-14 -7h28M-7 -14v-4M7 -14v-4" stroke="#D97706" stroke-width="1.5"/>
-            </g></g>
-            <path d="M70 115v20M65 130l5 5 5-5" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" class="anim-arrow"/>
+            <text x="170" y="75" text-anchor="middle" fill="#475569" font-size="11" font-family="Inter" font-weight="700">СКЛАД</text>
+            <!-- Ground line -->
+            <line x1="0" y1="132" x2="220" y2="132" stroke="#334155" stroke-width="1" opacity="0.3"/>
+
+            <!-- Truck (outline only, slides in from left) -->
+            <g class="anim-truck">
+              <g stroke="#3B82F6" stroke-width="2" fill="none" stroke-linejoin="round">
+                <!-- Cargo body -->
+                <rect x="25" y="70" width="65" height="50" rx="4" fill="rgba(59,130,246,0.05)"/>
+                <!-- Cab -->
+                <path d="M90 85 L 105 85 L 112 96 L 112 120 L 90 120"/>
+                <!-- Windshield -->
+                <path d="M93 89 L 103 89 L 108 97 L 93 97" opacity="0.6"/>
+                <!-- Detail lines -->
+                <path d="M30 82 L 85 82" opacity="0.3"/>
+              </g>
+              <!-- Wheels (filled) -->
+              <circle cx="42" cy="122" r="8" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="42" cy="122" r="3" fill="#475569"/>
+              <circle cx="100" cy="122" r="8" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="100" cy="122" r="3" fill="#475569"/>
+            </g>
+
+            <!-- Box: travels from truck INTO warehouse door -->
+            <g transform="translate(57, 95)">
+              <g class="anim-box-receive">
+                <rect x="-11" y="-11" width="22" height="22" rx="3" fill="#F59E0B" stroke="#D97706" stroke-width="1"/>
+                <path d="M-11 -5h22M-5 -11v-4M5 -11v-4" stroke="#D97706" stroke-width="1.5"/>
+              </g>
+            </g>
+
+            <!-- Arrow: truck → warehouse -->
+            <path d="M112 95 L 138 95 M 133 90 L 138 95 L 133 100" stroke="#22C55E" stroke-width="2" stroke-linecap="round" class="anim-arrow"/>
           </svg>
         </div>
         <h3>Приёмка</h3>
-        <p>Товар приходит от поставщика — сканируйте и размещайте по ячейкам</p>
+        <p>Грузовик подъезжает к складу — товар сканируется и размещается по ячейкам</p>
       </div>
 
       <!-- 5. PICKING -->
