@@ -5,276 +5,377 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simple TSD — Терминал сбора данных для склада</title>
 <meta name="description" content="Мобильное приложение для автоматизации складских операций: приёмка, отгрузка, инвентаризация, сборка заказов. Offline-first, сканер штрихкодов, печать этикеток.">
+<link rel="icon" href="icon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
-    line-height: 1.6;
-    color: #0f172a;
-    background: #ffffff;
+  :root {
+    --primary: #3B82F6;
+    --primary-dark: #2563EB;
+    --primary-light: #60A5FA;
+    --teal: #0F766E;
+    --teal-light: #14B8A6;
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --text: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    --border: #E2E8F0;
+    --radius: 16px;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
   }
-  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-content {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; max-width: 1200px; margin: 0 auto;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--teal));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 18px;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 15px; transition: color .2s; }
+  .nav-links a:hover { color: var(--primary); }
+  @media (max-width: 768px) { .nav-links { display: none; } }
 
   /* HERO */
   .hero {
-    background: linear-gradient(135deg, #2563eb 0%, #0f766e 100%);
-    color: white;
-    padding: 80px 0 100px;
-    position: relative;
-    overflow: hidden;
+    padding: 140px 0 80px;
+    background: linear-gradient(180deg, #EFF6FF 0%, var(--bg) 100%);
+    position: relative; overflow: hidden;
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%; right: -10%;
-    width: 600px; height: 600px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50%;
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
   }
-  .hero-content { position: relative; z-index: 1; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero { padding: 120px 0 60px; }
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #DBEAFE; color: var(--primary-dark);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; margin-bottom: 24px;
+  }
   .hero h1 {
-    font-size: 56px;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 24px;
-    letter-spacing: -1.5px;
+    font-size: 52px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -2px; margin-bottom: 20px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--primary), var(--teal));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .hero p {
-    font-size: 22px;
-    opacity: 0.95;
-    margin-bottom: 32px;
-    max-width: 640px;
+    font-size: 19px; color: var(--text-secondary); margin-bottom: 32px; max-width: 520px;
   }
-  .hero-badges {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 36px;
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--primary); color: white; padding: 14px 28px;
+    border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 16px;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.3);
+    transition: all .2s; display: inline-flex; align-items: center; gap: 8px;
   }
-  .badge {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 500;
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59,130,246,0.4); }
+  .btn-secondary {
+    background: var(--surface); color: var(--text); padding: 14px 28px;
+    border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;
+    border: 1px solid var(--border); transition: all .2s;
   }
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: white;
-    color: #2563eb;
-    padding: 16px 32px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: transform .15s;
+  .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* PHONE MOCKUP */
+  .phone-mockup {
+    position: relative; max-width: 300px; margin: 0 auto;
+    border-radius: 36px; padding: 8px;
+    background: linear-gradient(135deg, #1E293B, #334155);
+    box-shadow: 0 30px 60px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05);
   }
-  .cta:hover { transform: translateY(-2px); }
+  .phone-screen {
+    border-radius: 28px; overflow: hidden; position: relative;
+    aspect-ratio: 9/19.5; background: #000;
+  }
+  .phone-screen img { width: 100%; height: 100%; object-fit: cover; }
+  .phone-screen::before {
+    content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 24px; background: #000; border-radius: 12px; z-index: 2;
+  }
 
   /* SECTIONS */
   section { padding: 80px 0; }
-  .section-title {
-    font-size: 40px;
-    font-weight: 800;
-    text-align: center;
-    margin-bottom: 16px;
-    letter-spacing: -1px;
-  }
-  .section-subtitle {
-    text-align: center;
-    color: #64748b;
-    font-size: 18px;
-    margin-bottom: 56px;
-    max-width: 640px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-header h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+  .section-header p { color: var(--text-secondary); font-size: 18px; max-width: 580px; margin: 0 auto; }
 
-  /* FEATURES */
-  .features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+  /* FEATURES — app card style */
+  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .feature-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px;
+    transition: all .25s; position: relative; overflow: hidden;
   }
-  .feature {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 32px 28px;
-    transition: all .2s;
+  .feature-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--teal));
+    opacity: 0; transition: opacity .25s;
   }
-  .feature:hover {
-    border-color: #2563eb;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(37,99,235,0.1);
-  }
+  .feature-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .feature-card:hover::before { opacity: 1; }
   .feature-icon {
-    width: 56px; height: 56px;
-    background: linear-gradient(135deg, #2563eb, #0f766e);
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
-    margin-bottom: 20px;
+    width: 52px; height: 52px; border-radius: 14px; margin-bottom: 18px;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
   }
-  .feature h3 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 8px;
+  .feature-icon.blue { background: #DBEAFE; }
+  .feature-icon.teal { background: #CCFBF1; }
+  .feature-icon.purple { background: #EDE9FE; }
+  .feature-icon.amber { background: #FEF3C7; }
+  .feature-icon.pink { background: #FCE7F3; }
+  .feature-icon.green { background: #DCFCE7; }
+  .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .feature-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+
+  /* SCREENSHOTS GALLERY */
+  .gallery { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0 32px; scroll-snap-type: x mandatory; }
+  .gallery::-webkit-scrollbar { height: 6px; }
+  .gallery::-webkit-scrollbar-track { background: var(--border); border-radius: 3px; }
+  .gallery::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+  .gallery-item {
+    flex: 0 0 220px; scroll-snap-align: start;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); background: var(--surface);
+    box-shadow: var(--shadow); transition: transform .25s;
   }
-  .feature p { color: #64748b; font-size: 15px; }
+  .gallery-item:hover { transform: scale(1.04); }
+  .gallery-item img { width: 100%; display: block; aspect-ratio: 9/19.5; object-fit: cover; }
+  .gallery-item .caption { padding: 10px 14px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
 
   /* STATS */
-  .stats {
-    background: #0f172a;
-    color: white;
-    padding: 64px 0;
-  }
+  .stats-section { background: var(--text); color: white; }
+  .stats-section h2 { color: white; }
+  .stats-section .section-header p { color: var(--text-muted); }
   .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 32px;
-    text-align: center;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 24px; text-align: center; margin-top: 40px;
   }
   .stat-value {
-    font-size: 48px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #60a5fa, #34d399);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 8px;
+    font-size: 44px; font-weight: 900; margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--primary-light), var(--teal-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .stat-label { color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-label { color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; }
 
   /* USE CASES */
-  .use-cases {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-  }
+  .use-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
   .use-case {
-    border-left: 4px solid #2563eb;
-    padding: 20px 24px;
-    background: #f8fafc;
-    border-radius: 0 12px 12px 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px; display: flex; gap: 14px; align-items: start;
   }
-  .use-case h4 { font-size: 17px; margin-bottom: 6px; }
-  .use-case p { color: #64748b; font-size: 14px; }
+  .use-case-icon { font-size: 28px; flex-shrink: 0; }
+  .use-case h4 { font-size: 16px; margin-bottom: 4px; }
+  .use-case p { color: var(--text-secondary); font-size: 14px; }
+
+  /* HARDWARE */
+  .hardware-section { background: linear-gradient(135deg, #EFF6FF, #F0FDFA); }
+  .hardware-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+  .hardware-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 24px; text-align: center; min-width: 140px;
+    box-shadow: var(--shadow);
+  }
+  .hardware-item .hw-icon { font-size: 32px; margin-bottom: 8px; }
+  .hardware-item .hw-name { font-weight: 700; font-size: 15px; }
+  .hardware-item .hw-desc { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+
+  /* CTA */
+  .cta-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--teal) 100%);
+    color: white; text-align: center; padding: 80px 0;
+  }
+  .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
+  .cta-section p { font-size: 18px; opacity: 0.95; margin-bottom: 32px; }
+  .cta-section .btn-primary {
+    background: white; color: var(--primary-dark); box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .cta-section .btn-primary:hover { background: #F1F5F9; transform: translateY(-2px); }
 
   /* CONTACT */
-  .contact {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    color: white;
-    text-align: center;
-    padding: 80px 0;
+  .contact-section { padding: 60px 0; background: var(--text); color: white; text-align: center; }
+  .contact-section h2 { font-size: 28px; margin-bottom: 8px; }
+  .contact-section a {
+    color: var(--primary-light); font-size: 20px; font-weight: 600; text-decoration: none;
   }
-  .contact h2 { font-size: 36px; margin-bottom: 16px; }
-  .contact p { color: #94a3b8; margin-bottom: 32px; font-size: 18px; }
-  .contact-email {
-    display: inline-block;
-    color: #60a5fa;
-    font-size: 24px;
-    font-weight: 600;
-    text-decoration: none;
-    padding: 12px 24px;
-    border: 2px solid #60a5fa;
-    border-radius: 12px;
-    transition: all .2s;
-  }
-  .contact-email:hover { background: #60a5fa; color: #0f172a; }
+  .contact-section a:hover { text-decoration: underline; }
 
   /* FOOTER */
-  footer {
-    background: #0f172a;
-    color: #94a3b8;
-    padding: 32px 0;
-    text-align: center;
-    font-size: 14px;
-    border-top: 1px solid #1e293b;
-  }
-  footer a { color: #60a5fa; text-decoration: none; margin: 0 8px; }
+  footer { background: #020617; color: var(--text-muted); padding: 32px 0; text-align: center; font-size: 14px; }
+  footer a { color: var(--primary-light); text-decoration: none; margin: 0 6px; }
   footer a:hover { text-decoration: underline; }
 
-  @media (max-width: 768px) {
-    .hero { padding: 56px 0 72px; }
-    .hero h1 { font-size: 36px; }
-    .hero p { font-size: 18px; }
-    .section-title { font-size: 30px; }
-    .stat-value { font-size: 36px; }
-  }
+  /* SCROLL ANIMATION */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
+<nav>
+  <div class="nav-content">
+    <div class="logo">
+      <div class="logo-icon">📱</div>
+      <span>Simple TSD</span>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Возможности</a>
+      <a href="#screenshots">Скриншоты</a>
+      <a href="#hardware">Оборудование</a>
+      <a href="#contacts">Контакты</a>
+    </div>
+  </div>
+</nav>
+
 <!-- HERO -->
 <div class="hero">
-  <div class="container hero-content">
-    <div class="hero-badges">
-      <span class="badge">📦 Складские операции</span>
-      <span class="badge">📱 ТСД устройства</span>
-      <span class="badge">🔄 Offline-first</span>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge">📦 Версия 1.0 доступна в Google Play</div>
+        <h1>Складские операции <span>в кармане</span></h1>
+        <p>Simple TSD — мобильное приложение для терминалов сбора данных. Приёмка, отгрузка, инвентаризация, сборка заказов. Работает офлайн, синхронизируется автоматически.</p>
+        <div class="hero-cta">
+          <a href="#contacts" class="btn-primary">⬇ Скачать из Google Play</a>
+          <a href="#screenshots" class="btn-secondary">Посмотреть скриншоты</a>
+        </div>
+      </div>
+      <div>
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <img src="screenshots/01_home.png" alt="Simple TSD — главный экран">
+          </div>
+        </div>
+      </div>
     </div>
-    <h1>Simple TSD<br>Терминал сбора данных для склада</h1>
-    <p>Автоматизируйте приёмку, отгрузку, инвентаризацию и сборку заказов. Работает на обычных Android-смартфонах и специализированных ТСД (Urovo, Zebra, Honeywell).</p>
-    <a href="#" class="cta">⬇ Скачать из Google Play</a>
   </div>
 </div>
 
 <!-- FEATURES -->
-<section>
+<section id="features">
   <div class="container">
-    <h2 class="section-title">Возможности</h2>
-    <p class="section-subtitle">Полный набор инструментов для складских операций — в одном приложении</p>
+    <div class="section-header fade-in">
+      <h2>Всё для склада — в одном приложении</h2>
+      <p>Полный набор инструментов для автоматизации складских операций. От приёмки до отгрузки.</p>
+    </div>
     <div class="features">
-      <div class="feature">
-        <div class="feature-icon">📥</div>
-        <h3>Складские операции</h3>
-        <p>Приёмка, отгрузка, перемещение, инвентаризация, списание, оприходование — все типы операций в одном меню.</p>
+      <div class="feature-card fade-in">
+        <div class="feature-icon blue">📥</div>
+        <h3>6 типов операций</h3>
+        <p>Приёмка, отгрузка, перемещение, инвентаризация, списание, оприходование. Все операции — в одном меню.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🎯</div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon teal">🎯</div>
         <h3>Сборка заказов</h3>
-        <p>Пошаговые задания с pick-by-pick сценарием. Контроль качества, обработка частичных и избыточных количеств.</p>
+        <p>Пошаговые задания с pick-by-pick сценарием. Контроль частичных и избыточных количеств.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">📷</div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon purple">📷</div>
         <h3>Сканер штрихкодов</h3>
-        <p>Камера устройства, Bluetooth SPP-сканеры, встроенные аппаратные сканеры ТСД. EAN-13, QR, Code128, DataMatrix, PDF417.</p>
+        <p>Камера, Bluetooth SPP, аппаратный сканер ТСД. EAN-13, QR, Code128, DataMatrix, PDF417.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🔄</div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon amber">🔄</div>
         <h3>Offline-first</h3>
-        <p>Работа без интернета. Локальная база Hive, очередь мутаций, автоматическая синхронизация при появлении сети.</p>
+        <p>Полная работа без интернета. Локальная база Hive, очередь мутаций, автосинхронизация.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🖨️</div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon pink">🖨️</div>
         <h3>Печать этикеток</h3>
-        <p>Генерация ZPL и печать ценников на Bluetooth-принтерах. Шаблоны для разных типов товаров.</p>
+        <p>Генерация ZPL и печать ценников на Bluetooth-принтерах. Готовые шаблоны.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🔔</div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon green">🔔</div>
         <h3>Push-уведомления</h3>
-        <p>Мгновенные оповещения о новых заданиях через Firebase Cloud Messaging. Не пропустите важный заказ.</p>
+        <p>Мгновенные оповещения о новых заданиях через Firebase Cloud Messaging.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENSHOTS -->
+<section id="screenshots" style="background: linear-gradient(180deg, var(--bg) 0%, #EFF6FF 100%);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <h2>Экраны приложения</h2>
+      <p>Чистый, понятный интерфейс. Адаптируется под телефон и планшет.</p>
+    </div>
+    <div class="gallery">
+      <div class="gallery-item">
+        <img src="screenshots/01_home.png" alt="Главный экран">
+        <div class="caption">Главный экран</div>
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/02_operations.png" alt="Операции">
+        <div class="caption">Складские операции</div>
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/03_jobs.png" alt="Задания">
+        <div class="caption">Сборка заказов</div>
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/04_stock.png" alt="Товары">
+        <div class="caption">Поиск товаров</div>
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/05_item_detail.png" alt="Карточка товара">
+        <div class="caption">Карточка товара</div>
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/06_printing.png" alt="Печать этикеток">
+        <div class="caption">Печать ценников</div>
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/07_settings.png" alt="Настройки">
+        <div class="caption">Настройки</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- STATS -->
-<div class="stats">
+<section class="stats-section">
   <div class="container">
-    <div class="stats-grid">
+    <div class="section-header fade-in">
+      <h2>Цифры</h2>
+      <p>Технологии, которые работают на твоём складе</p>
+    </div>
+    <div class="stats-grid fade-in">
       <div>
         <div class="stat-value">6+</div>
         <div class="stat-label">Типов операций</div>
       </div>
       <div>
         <div class="stat-value">10+</div>
-        <div class="stat-label">Форматов штрихкодов</div>
+        <div class="stat-label">Форматов кодов</div>
       </div>
       <div>
         <div class="stat-value">3</div>
@@ -286,54 +387,135 @@
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- USE CASES -->
-<section>
+<!-- HARDWARE -->
+<section id="hardware" class="hardware-section">
   <div class="container">
-    <h2 class="section-title">Для кого</h2>
-    <p class="section-subtitle">Подходит для разных типов бизнеса</p>
-    <div class="use-cases">
-      <div class="use-case">
-        <h4>🏪 Розничные магазины</h4>
-        <p>Приёмка товара, инвентаризация, переоценка, отгрузка в филиалы.</p>
+    <div class="section-header fade-in">
+      <h2>Поддерживаемое оборудование</h2>
+      <p>Работает на обычных Android-смартфонах и профессиональных ТСД</p>
+    </div>
+    <div class="hardware-grid fade-in">
+      <div class="hardware-item">
+        <div class="hw-icon">📱</div>
+        <div class="hw-name">Android смартфон</div>
+        <div class="hw-desc">Любой с камерой</div>
       </div>
-      <div class="use-case">
-        <h4>🚚 Доставка и e-commerce</h4>
-        <p>Сборка заказов по пик-листам, сканирование при отгрузке, контроль курьеров.</p>
+      <div class="hardware-item">
+        <div class="hw-icon">🔧</div>
+        <div class="hw-name">Urovo</div>
+        <div class="hw-desc">ТСД с hardware scanner</div>
       </div>
-      <div class="use-case">
-        <h4>🏭 Производство</h4>
-        <p>Учёт сырья и готовой продукции, перемещения между цехами, списания.</p>
+      <div class="hardware-item">
+        <div class="hw-icon">zebra</div>
+        <div class="hw-name">Zebra</div>
+        <div class="hw-desc">TC-series, etс.</div>
       </div>
-      <div class="use-case">
-        <h4>📦 3PL логистика</h4>
-        <p>Адресное хранение, размещение по ячейкам, отбор для нескольких клиентов.</p>
+      <div class="hardware-item">
+        <div class="hw-icon">🔲</div>
+        <div class="hw-name">Honeywell</div>
+        <div class="hw-desc">CT60, EDA50, etс.</div>
+      </div>
+      <div class="hardware-item">
+        <div class="hw-icon">📶</div>
+        <div class="hw-name">Bluetooth SPP</div>
+        <div class="hw-desc">Любые SPP-сканеры</div>
+      </div>
+      <div class="hardware-item">
+        <div class="hw-icon">🖨️</div>
+        <div class="hw-name">Bluetooth принтер</div>
+        <div class="hw-desc">ZPL-совместимые</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<div class="contact">
+<!-- USE CASES -->
+<section>
   <div class="container">
-    <h2>Свяжитесь с нами</h2>
-    <p>Хотите подключить Simple TSD к вашему бизнесу?</p>
-    <a href="mailto:sa@4dev.kz" class="contact-email">sa@4dev.kz</a>
+    <div class="section-header fade-in">
+      <h2>Для кого</h2>
+      <p>Подходит для разных типов бизнеса</p>
+    </div>
+    <div class="use-cases fade-in">
+      <div class="use-case">
+        <div class="use-case-icon">🏪</div>
+        <div>
+          <h4>Розница</h4>
+          <p>Приёмка товара, инвентаризация, переоценка, отгрузка в филиалы.</p>
+        </div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">🚚</div>
+        <div>
+          <h4>E-commerce</h4>
+          <p>Сборка заказов по пик-листам, сканирование при отгрузке.</p>
+        </div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">🏭</div>
+        <div>
+          <h4>Производство</h4>
+          <p>Учёт сырья и готовой продукции, перемещения, списания.</p>
+        </div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">📦</div>
+        <div>
+          <h4>3PL логистика</h4>
+          <p>Адресное хранение, размещение по ячейкам, множественные клиенты.</p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Начните использовать Simple TSD</h2>
+    <p>Подключите приложение к системе Simple и автоматизируйте свой склад</p>
+    <a href="#contacts" class="btn-primary">Связаться с нами</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contacts">
+  <div class="container">
+    <h2>Контакты</h2>
+    <p style="color: var(--text-muted); margin-bottom: 16px;">FORDEV · Республика Казахстан</p>
+    <a href="mailto:sa@4dev.kz">sa@4dev.kz</a>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
   <div class="container">
     <p>© 2024–2026 FORDEV. Республика Казахстан.</p>
-    <p style="margin-top: 12px;">
+    <p style="margin-top: 8px;">
       <a href="privacy-policy-ru.html">Политика конфиденциальности</a> ·
       <a href="data-deletion.html">Удаление данных</a> ·
       <a href="mailto:sa@4dev.kz">sa@4dev.kz</a>
     </p>
   </div>
 </footer>
+
+<script>
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
 
 </body>
 </html>
